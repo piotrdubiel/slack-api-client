@@ -19,6 +19,8 @@ class BaseClass
     else
       xhr.query params
 
+    xhr.set 'Accept-Encoding', 'gzip'
+
     xhr.end (err, res) =>
       throw err if err
       if res.ok
