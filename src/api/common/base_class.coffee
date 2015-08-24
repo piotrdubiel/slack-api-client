@@ -1,4 +1,4 @@
-request = require 'superagent'
+request = require 'request'
 
 class BaseClass
 
@@ -11,25 +11,21 @@ class BaseClass
   request: (method = 'GET', url = '', params = {}, callback) ->
     params.token = @slack.apiKey
 
-    xhr = request[method.toLowerCase()] "#{@slack.host}#{url}"
-
-    if method is 'POST'
-      xhr.type 'form'
-      xhr.send params
-    else
-      xhr.query params
-
-    xhr.set 'Accept-Encoding', 'gzip'
-
-    xhr.end (err, res) =>
-      throw err if err
-      if res.ok
-        unless res.body.ok
-          callback @throwError res.body
+    uri = "#{@slack.host}#{url}"
+    request
+      method: method
+      uri: uri
+      form: params if method is 'POST'
+      qs: params if method isnt 'POST', (err, res, body) =>
+        throw err if err
+        data = JSON.parse(body)
+        if res.statusCode is 200
+          unless data.ok
+            callback @throwError data
+          else
+            callback null, data
         else
-          callback null, res.body
-      else
-        callback @throwError res.body
+          callback @throwError data
 
   validate:
     obj: (options = {}, validation = []) ->
