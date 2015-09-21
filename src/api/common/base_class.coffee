@@ -18,14 +18,17 @@ class BaseClass
       form: params if method is 'POST'
       qs: params if method isnt 'POST', (err, res, body) =>
         throw err if err
-        data = JSON.parse(body)
-        if res.statusCode is 200
-          unless data.ok
-            callback @throwError data
+        try
+          data = JSON.parse(body)
+          if res.statusCode is 200
+            unless data.ok
+              callback @throwError data
+            else
+              callback null, data
           else
-            callback null, data
-        else
-          callback @throwError data
+            callback @throwError data
+        catch error
+          callback @throwError error
 
   validate:
     obj: (options = {}, validation = []) ->
