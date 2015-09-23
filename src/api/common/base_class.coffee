@@ -17,7 +17,7 @@ class BaseClass
       uri: uri
       form: params if method is 'POST'
       qs: params if method isnt 'POST', (err, res, body) =>
-        throw err if err
+        callback err if err
         try
           data = JSON.parse(body)
           if res.statusCode is 200
@@ -28,7 +28,7 @@ class BaseClass
           else
             callback @throwError data
         catch error
-          callback @throwError error
+          callback new Error("Invalid response: '#{body}'")
 
   validate:
     obj: (options = {}, validation = []) ->
