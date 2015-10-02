@@ -13,6 +13,7 @@ class Slack
       'groups': require './api/groups'
       'im': require './api/im'
       'oauth': require './api/oauth'
+      'reactions': require './api/reactions'
       'rtm': require './api/rtm'
       'search': require './api/search'
       'stars': require './api/stars'

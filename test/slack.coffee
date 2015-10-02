@@ -55,3 +55,6 @@ describe 'Slack', ->
 
   it 'adds users to the api object', ->
     @slack.api.should.have.property 'users'
+
+  it 'adds reactions to the api object', ->
+    @slack.api.should.have.property 'reactions'
